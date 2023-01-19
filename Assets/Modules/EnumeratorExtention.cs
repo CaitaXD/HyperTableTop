@@ -15,6 +15,10 @@ public static class EnumeratorExtention
     {
         return new CartesianPairEnumerator(..width, ..height);
     }
+    public static CartesianPairEnumerator Cartesian(Range width, Range height)
+    {
+        return new CartesianPairEnumerator(width, height);
+    }
     
     public static IEnumerable<string> CoordinateNames(int width, int height)
     {

@@ -2,43 +2,86 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static EnumeratorExtention;
 public class Board : MonoBehaviour
 {
     [SerializeField]
+<<<<<<< Updated upstream
     public Vector2Int Dimentions;
+=======
+    [SerializeAs("Dimentions")]
+    Vector2Int _dimentions;
+>>>>>>> Stashed changes
     [SerializeField]
-    GameObject PrefabTile;
+    [SerializeAs("PrefabTile")]
+    GameObject _prefabTile;
     [SerializeField]
+<<<<<<< Updated upstream
     public Grid Grid;
 
     MatrixView<GameObject> _tiles;
+=======
+    [SerializeAs("Grid")]
+    Grid _grid;
+>>>>>>> Stashed changes
     
+    [SerializeField]
+    [SerializeAs("Tiles")]
+    MatrixView<GameObject> _tiles;
+    public Type BoardType = Type.ChessBoard;
+    public Transform SelectedPiece { get; private set; }
+    
+
+
     void Awake()
     {
-        var arr_names = CoordinateNames(Dimentions.x, Dimentions.y).ToArray();
-        var arr_tiles = new GameObject[Dimentions.x * Dimentions.y];
-        
-        _tiles = new MatrixView<GameObject>(arr_tiles, Dimentions.x, Dimentions.y);
-        var names = new MatrixView<string>(arr_names, Dimentions.x, Dimentions.y);
-        
-        Grid = Grid == null ? GetComponent<Grid>() : Grid;
-        PrefabTile = PrefabTile == null ? Resources.Load<GameObject>("Prefabs/Tile") : PrefabTile;
+        var arr_names = CoordinateNames(_dimentions.x, _dimentions.y).ToArray();
+        var arr_tiles = new GameObject[_dimentions.x * _dimentions.y];
 
+<<<<<<< Updated upstream
         
         foreach (var (x, y) in Cartesian(Dimentions.x, Dimentions.y))
-        {
-            var position = new Vector2(x - Dimentions.x/2, y - Dimentions.y/2);
-            var rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
-            var tile = Instantiate(PrefabTile, position, rotation, Grid.transform);
+=======
+        _tiles = new MatrixView<GameObject>(arr_tiles, _dimentions.x, _dimentions.y);
+        var names = new MatrixView<string>(arr_names, _dimentions.x, _dimentions.y);
 
-            if(MathI.IsEven(x + y))
+        _grid = _grid == null ? GetComponent<Grid>() : _grid;
+        _prefabTile = _prefabTile == null ? Resources.Load<GameObject>("Prefabs/Tile") : _prefabTile;
+
+        switch (BoardType)
+>>>>>>> Stashed changes
+        {
+
+        case Type.ChessBoard: 
+            ChessBoard(names);
+            break;
+
+        default: throw new NotImplementedException();
+        }
+
+    }
+
+    private void ChessBoard(MatrixView<string> names)
+    {
+        foreach (var (x, y) in Cartesian(_dimentions.x, _dimentions.y))
+        {
+            var position = new Vector2(x - _dimentions.x / 2, y - _dimentions.y / 2);
+            var rotation = Quaternion.Euler(0, transform.eulerAngles.y, 0);
+            var tile = Instantiate(_prefabTile, position, rotation, _grid.transform);
+
+            if (MathI.IsEven(x + y))
             {
                 tile.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.black);
             }
-            tile.name = names[x,y];
+            tile.name = names[x, y];
             _tiles[x, y] = tile;
         }
+    }
+
+    public enum Type
+    {
+        ChessBoard
     }
 }
