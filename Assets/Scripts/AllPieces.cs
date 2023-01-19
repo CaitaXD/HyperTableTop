@@ -5,7 +5,7 @@ using UnityEngine;
 public class AllPieces : MonoBehaviour
 {
     public Board board;
-    int length => board.Dimentions.x * board.Dimentions.y;
+    int length => board._dimentions.x * board._dimentions.y;
     public readonly static Dictionary<string, int[]> Moves_Table; // Dicionário com todos os movimentos possiveis
     public int[] EspacosOcupados; // Um array que representa as posições na mesa, e o número que el guarda é o index do objeto no PieceList;
     PieceLogic[] PieceList; // Uma lista de todas as peças na mesa em ordem de criação
@@ -55,16 +55,16 @@ public class AllPieces : MonoBehaviour
             return;
         }
 
-        PieceLogic piece = new PieceLogic(index, type, length);
+        PieceLogic piece = new(index, type, length);
         PieceList[pieceCounter] = piece;
         EspacosOcupados[index] = pieceCounter;
         pieceCounter++;
 
-        int x = piece.getIndex() % board.Dimentions.x;
-        int y = piece.getIndex() / board.Dimentions.y;
-        var position = new Vector2(x - board.Dimentions.x / 2, y - board.Dimentions.y / 2);
+        int x = piece.getIndex() % board._dimentions.x;
+        int y = piece.getIndex() / board._dimentions.y;
+        var position = new Vector2(x - board._dimentions.x / 2, y - board._dimentions.y / 2);
         var rotation = Quaternion.Euler(90, 0, 00);
-        var item = Instantiate(PrefabPiece, position, rotation, board.Grid.transform);
+        var item = Instantiate(PrefabPiece, position, rotation, board._grid.transform);
 
         item.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0.70f, 0.13f, 0.13f));
         item.transform.position -= new Vector3(0, 0, (float)0.25);

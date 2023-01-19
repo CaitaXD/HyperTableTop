@@ -8,42 +8,25 @@ using static EnumeratorExtention;
 public class Board : MonoBehaviour
 {
     [SerializeField]
-<<<<<<< Updated upstream
-    public Vector2Int Dimentions;
-=======
     [SerializeAs("Dimentions")]
-    Vector2Int _dimentions;
->>>>>>> Stashed changes
+    internal Vector2Int _dimentions;
     [SerializeField]
     [SerializeAs("PrefabTile")]
-    GameObject _prefabTile;
+    internal GameObject _prefabTile;
     [SerializeField]
-<<<<<<< Updated upstream
-    public Grid Grid;
-
-    MatrixView<GameObject> _tiles;
-=======
     [SerializeAs("Grid")]
-    Grid _grid;
->>>>>>> Stashed changes
+    internal Grid _grid;
     
     [SerializeField]
     [SerializeAs("Tiles")]
     MatrixView<GameObject> _tiles;
     public Type BoardType = Type.ChessBoard;
     public Transform SelectedPiece { get; private set; }
-    
-
-
     void Awake()
     {
         var arr_names = CoordinateNames(_dimentions.x, _dimentions.y).ToArray();
         var arr_tiles = new GameObject[_dimentions.x * _dimentions.y];
 
-<<<<<<< Updated upstream
-        
-        foreach (var (x, y) in Cartesian(Dimentions.x, Dimentions.y))
-=======
         _tiles = new MatrixView<GameObject>(arr_tiles, _dimentions.x, _dimentions.y);
         var names = new MatrixView<string>(arr_names, _dimentions.x, _dimentions.y);
 
@@ -51,7 +34,6 @@ public class Board : MonoBehaviour
         _prefabTile = _prefabTile == null ? Resources.Load<GameObject>("Prefabs/Tile") : _prefabTile;
 
         switch (BoardType)
->>>>>>> Stashed changes
         {
 
         case Type.ChessBoard: 
