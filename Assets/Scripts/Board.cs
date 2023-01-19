@@ -7,11 +7,11 @@ using static EnumeratorExtention;
 public class Board : MonoBehaviour
 {
     [SerializeField]
-    Vector2Int Dimentions;
+    public Vector2Int Dimentions;
     [SerializeField]
     GameObject PrefabTile;
     [SerializeField]
-    Grid Grid;
+    public Grid Grid;
 
     MatrixView<GameObject> _tiles;
     
@@ -26,7 +26,7 @@ public class Board : MonoBehaviour
         Grid = Grid == null ? GetComponent<Grid>() : Grid;
         PrefabTile = PrefabTile == null ? Resources.Load<GameObject>("Prefabs/Tile") : PrefabTile;
 
-
+        
         foreach (var (x, y) in Cartesian(Dimentions.x, Dimentions.y))
         {
             var position = new Vector2(x - Dimentions.x/2, y - Dimentions.y/2);
