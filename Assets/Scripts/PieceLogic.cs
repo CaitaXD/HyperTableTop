@@ -5,36 +5,35 @@ using UnityEngine;
 
 public class PieceLogic
 {
-    private int index;
-    private string type;
-    private int length;
-
+    public int Index { get; private set; }
+    private readonly Type type;
+    private readonly int length;
+    public enum Type
+    {
+        Checker,
+        Pawn,
+    }
     public PieceLogic()
     {
     }
-    public PieceLogic(int index, string type, int length)
+    public PieceLogic(int index, Type type, int length)
     {
-        this.index = index;
+        this.Index = index;
         this.type = type;
         this.length = length;
     }
 
     public void Move(int destIndex)
     {
-        int offset = destIndex - index;
+        int offset = destIndex - Index;
         bool destValido = destIndex >= 0 && destIndex < length;
 
-        if (destValido && AllPieces.Moves_Table[type].Contains(offset))
+        if (destValido && PieceCollection.Moves_Table[type].Contains(offset))
         {
-            index = destIndex;
+            Index = destIndex;
         } else
         {
             Debug.Log("Movimento nao sucedido");
         }
-    }
-
-    public int getIndex()
-    {
-        return index;
     }
 }

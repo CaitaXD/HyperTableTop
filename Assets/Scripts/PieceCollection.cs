@@ -1,32 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AllPieces : MonoBehaviour
+public class PieceCollection : MonoBehaviour
 {
     public Board board;
-    int length => board._dimentions.x * board._dimentions.y;
-    public readonly static Dictionary<string, int[]> Moves_Table; // Dicionário com todos os movimentos possiveis
-    public int[] EspacosOcupados; // Um array que representa as posições na mesa, e o número que el guarda é o index do objeto no PieceList;
-    PieceLogic[] PieceList; // Uma lista de todas as peças na mesa em ordem de criação
+    int length;
+    // Dicionário com todos os movimentos possiveis
+    public readonly static Dictionary<PieceLogic.Type, int[]> Moves_Table;
+    // Um array que representa as posições na mesa, e o número que el guarda é o index do objeto no PieceList;
+    public int[] EspacosOcupados;
+    // Uma lista de todas as peças na mesa em ordem de criação
+    PieceLogic[] PieceList;
     [SerializeField]
     GameObject PrefabPiece;
     private int pieceCounter;
 
-    static AllPieces()
+    static PieceCollection()
     {
-        Moves_Table = new Dictionary<string, int[]>
+        Moves_Table = new Dictionary<PieceLogic.Type, int[]>
         {
-            {"dama", new int[4]{-9,-7,7,9} },
-            {"peao", new int[4]{-8,-1,1,8} }
+            {PieceLogic.Type.Checker, new int[4]{-9,-7,7,9} },
+            {PieceLogic.Type.Pawn, new int[4]{-8,-1,1,8} }
         };
     }
-
     public void Awake()
     {
+        board = board == null ? GetComponent<Board>() : board;
+
+        length = board._dimentions.x * board._dimentions.y;
         PieceList = new PieceLogic[length];
         EspacosOcupados = new int[length];
-
         for (int i = 0; i < length; i++)
         {
             PieceList[i] = new PieceLogic();
@@ -37,14 +42,9 @@ public class AllPieces : MonoBehaviour
 
         PrefabPiece = PrefabPiece == null ? Resources.Load<GameObject>("Prefabs/Piece") : PrefabPiece;
     }
-
-    private void Update()
+    public void AddPiece(int index, PieceLogic.Type type)
     {
-    }
-
-    public void AddPiece(int index, string type)
-    {
-        if(index < 0 || index >= length)
+        if (index < 0 || index >= length)
         {
             Debug.Log("Index invalido");
             return;
@@ -60,8 +60,8 @@ public class AllPieces : MonoBehaviour
         EspacosOcupados[index] = pieceCounter;
         pieceCounter++;
 
-        int x = piece.getIndex() % board._dimentions.x;
-        int y = piece.getIndex() / board._dimentions.y;
+        int x = piece.Index % board._dimentions.x;
+        int y = piece.Index / board._dimentions.y;
         var position = new Vector2(x - board._dimentions.x / 2, y - board._dimentions.y / 2);
         var rotation = Quaternion.Euler(90, 0, 00);
         var item = Instantiate(PrefabPiece, position, rotation, board._grid.transform);
@@ -69,19 +69,15 @@ public class AllPieces : MonoBehaviour
         item.GetComponent<MeshRenderer>().material.SetColor("_Color", new Color(0.70f, 0.13f, 0.13f));
         item.transform.position -= new Vector3(0, 0, (float)0.25);
     }
-
-    public void AddBasic()
+    public void AddChecker()
     {
-        AddPiece(pieceCounter, "dama");
+        AddPiece(pieceCounter, PieceLogic.Type.Checker);
     }
-
-
-    public void imprimeEspacoOcupados()
+    public void PrintOccupiedSpaces()
     {
         Debug.Log("Espacos Ocupados: <");
         for (int i = 0; i < length; i++)
             Debug.Log(EspacosOcupados[i]);
         Debug.Log(">");
     }
-
 }
